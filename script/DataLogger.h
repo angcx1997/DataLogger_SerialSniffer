@@ -15,17 +15,23 @@
 #ifndef DATALOGGER_H_
 #define DATALOGGER_H_
 
-#define DATA_LOGGER_SOI 0xFF
-#define DATA_LOGGER_EOI	0xFB
-
 #include <stdint.h>
 #include <stdbool.h>
 #include <UnionDataStruct.h>
 
+/**
+ * Stack allocated to store array that want to be send
+ * Example: if user want to send 100 byte, put >=100
+ */
+#define DATA_LOGGER_STACK_ALLOCATED			50
+
+/**
+ * Data logger transmit message type
+ */
 typedef struct{
-	uint8_t* pMsg;
-	uint16_t size;
-	uint16_t arr_ptr_idx;
+	uint8_t* pMsg;			/*!<Pointer to the array storing the tx message*/
+	uint16_t size;			/*!<Size of the tx message*/
+	uint16_t arr_ptr_idx;	/*!<array pointer index*/
 }DataLogger_Msg_t;
 
 /**
@@ -37,14 +43,16 @@ void DataLogger_Init(DataLogger_Msg_t* msg);
 
 /**
  * @brief Add message to data_logger
- * @param num number of data that user want to  send
+ * @param msg pointer to datalogger
+ * @param arr pointer to user added array
+ * @param size size of user addded array
  */
 void DataLogger_AddMessage(DataLogger_Msg_t* msg, uint8_t arr[], uint16_t Size);
 
 
 /**
  * @brief use to construct Tx Message
- * @param num number of data that user want to  send
+ * @param msg pointer to datalogger
  */
 void DataLogger_CompleteTxMessage(DataLogger_Msg_t* msg);
 

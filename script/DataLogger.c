@@ -10,15 +10,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-///Byte length
+/**
+ * Byte length
+ */
 #define SOI_BYTE 1
 #define EOI_BYTE 1
 #define CHECKSUM_BYTE 2
 #define SIZE_BYTE 1
 #define CONFIG_BYTE_LENGTH (SOI_BYTE+EOI_BYTE+CHECKSUM_BYTE+SIZE_BYTE)
 
+/**
+ * Byte Initial and ending byte
+ */
+#define DATA_LOGGER_SOI 0xFF
+#define DATA_LOGGER_EOI	0xFB
+
 #define INFO_START_IDX	2
-static uint8_t data_logger_array[100];
+static uint8_t data_logger_array[50];
 static uint16_t CheckSum(uint8_t arr[], uint16_t Size);
 
 void DataLogger_Init(DataLogger_Msg_t* msg){
