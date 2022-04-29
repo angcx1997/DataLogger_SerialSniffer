@@ -1,0 +1,31 @@
+---
+# Filename
+csv-filename: data-logger.csv
+
+#Serial port config
+serial:
+  name: /dev/ttyACM0
+  baudrate: 115200
+  timeout: 0.1
+  stopbit: 1
+  parity: N
+  bytesize: 8
+
+# Start and end byte of the transfer
+soi: 0xFF
+eoi: 0xFB
+total_number_receive: 11
+
+#Write according to arrival sequence
+#data-type available:
+# float,
+# uint8_t, uint16_t, uint32_t,
+# int8_t, int16_t, int32_t
+data-logging:
+  info2:
+    name: data1
+    type: uint16_t #2 byte
+  info1:
+    name: data2
+    type: float #4 byte
+
