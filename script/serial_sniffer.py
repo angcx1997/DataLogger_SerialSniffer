@@ -36,6 +36,7 @@ def checkIntegrity(packet,config):
         #Checksum
         if ((checksum >> 8 & 0xFF) != packet[len(packet) - 1 -2] and 
             (checksum & 0xFF) != packet[len(packet) - 1 - 1]):
+            print("Wrong checksum")
             return False
         
         #Check end of transmission
@@ -57,7 +58,7 @@ def byteFormatter(type, packet, start_idx):
         return struct.unpack('H', packet[start_idx:end_idx])[0], end_idx
     elif(type == "uint32_t"):
         end_idx = start_idx + 4
-        return struct.unpack('L', packet[start_idx:end_idx])[0], end_idx
+        return struct.unpack('I', packet[start_idx:end_idx])[0], end_idx
     elif(type == "int8_t"):
         end_idx = start_idx + 1
         return struct.unpack('b', packet[start_idx:end_idx])[0], end_idx
@@ -66,7 +67,7 @@ def byteFormatter(type, packet, start_idx):
         return struct.unpack('h', packet[start_idx:end_idx])[0], end_idx
     elif(type == "int32_t"):
         end_idx = start_idx + 4
-        return struct.unpack('l', packet[start_idx:end_idx])[0], end_idx
+        return struct.unpack('i', packet[start_idx:end_idx])[0], end_idx
 
 
 def main():
@@ -102,10 +103,9 @@ def main():
         line = ser.read(packet_length)
         data_integrity = checkIntegrity(line,config)
         if(data_integrity):
-            for i in line:
-                print(hex(i), end=" ")
-            print()
-            logged_data = [index,time.time_ns()]
+            if(index%100 == 0):
+                print("[%d, %d]Data received"%(index,time.time()))
+            logged_data = [index,time.time_ns() // 1000000 ]
             start_idx = 2
             for key in config['data-logging']:
                 type = config['data-logging'][key]['type']

@@ -14,7 +14,8 @@ serial:
 # Start and end byte of the transfer
 soi: 0xFF
 eoi: 0xFB
-total_number_receive: 11
+# size of byte user want to send include soi(1),eoi(1),checksum(1), size(2), info(user-defined)
+total_number_receive: 13
 
 #Write according to arrival sequence
 #data-type available:
@@ -22,10 +23,16 @@ total_number_receive: 11
 # uint8_t, uint16_t, uint32_t,
 # int8_t, int16_t, int32_t
 data-logging:
-  info2:
-    name: data1
-    type: uint16_t #2 byte
-  info1:
-    name: data2
-    type: float #4 byte
+  data1:
+    name: float_data
+    type: float
+  data2:
+    name: tick
+    type: uint32_t
+  # data3:
+  #   name: data3
+  #   type: uint8_t
+  # data4:
+  #   name: data4
+  #   type: uint8_t
 

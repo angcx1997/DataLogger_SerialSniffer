@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "string.h"
+#include "../script/DataLogger.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,6 +70,8 @@ static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN 0 */
 
 uint8_t sendStr[11];
+DataLogger_Msg_t datalog_msg;
+uint8_t array[4];
 /* USER CODE END 0 */
 
 /**
@@ -102,6 +105,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  DataLogger_Init(&datalog_msg);
   int i = 0;
   /* USER CODE END 2 */
 
@@ -112,34 +116,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  memset(&sendStr, i++, sizeof(sendStr));
-	  uint8_t SOI = 0xFF;
-	  uint8_t EOI = 0xFB;
-	  uint8_t size = 6;
-	  uint16_in_byte_u tmp1;
-	  int i = 2;
-	  tmp1.u_data = 0x3478;
-	  sendStr[i++] = tmp1.data[0];
-	  sendStr[i++] = tmp1.data[1];
+	  float_byte_u float_data;
+	  float_data.data = 1.0;
 
-	  float_in_byte_u tmp;
-	  tmp.f_data = 1.5987;
-	  sendStr[0] = SOI;
-	  sendStr[1] = size;
-	  sendStr[i++] = tmp.data[0];
-	  sendStr[i++] = tmp.data[1];
-	  sendStr[i++] = tmp.data[2];
-	  sendStr[i++] = tmp.data[3];
-	  uint16_t checksum = 0;
-	  for(int i = 0; i < 2+size;i++){
-		  checksum += sendStr[i];
-	  }
-	  sendStr[i++] = checksum>>8 & 0xFF ;
-	  sendStr[i++] = checksum & 0xFF;
-	  sendStr[i++] = EOI;
-
-	  HAL_UART_Transmit(&huart3, sendStr, sizeof(sendStr), 10);
-	  HAL_Delay(1000);
+	  uint32_byte_u tick;
+	  tick.data = HAL_GetTick();
+	  DataLogger_AddMessage(&datalog_msg, float_data.array, sizeof(float_data.array));
+	  DataLogger_AddMessage(&datalog_msg, tick.array, sizeof(tick.array));
+	  DataLogger_CompleteTxMessage(&datalog_msg);
+	  HAL_UART_Transmit(&huart3, datalog_msg.pMsg, datalog_msg.size, 1);
+	  HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }
