@@ -36,7 +36,6 @@ def checkIntegrity(packet,config):
         #Checksum
         if ((checksum >> 8 & 0xFF) != packet[len(packet) - 1 -2] and 
             (checksum & 0xFF) != packet[len(packet) - 1 - 1]):
-            print("Wrong checksum")
             return False
         
         #Check end of transmission
@@ -102,6 +101,7 @@ def main():
     while True:
         line = ser.read(packet_length)
         data_integrity = checkIntegrity(line,config)
+
         if(data_integrity):
             if(index%100 == 0):
                 print("[%d, %d]Data received"%(index,time.time()))
@@ -113,7 +113,6 @@ def main():
                 logged_data.append(data)
             writer.writerow(logged_data)
             index+=1    
-
 
 #Run main() function
 if __name__ == '__main__':
