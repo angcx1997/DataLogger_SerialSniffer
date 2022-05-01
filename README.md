@@ -29,6 +29,8 @@ Highly customizable and easy to use.
     `data/name`: name will be used in the header
     
     `data/type`: supported data type, `float`, `uint8/26/32_t`, and `int8/16/32_t`
+3. Run the script by making the file executable `chmod +x serial_sniffer.py`
+4. Execute the file `python3 serial_sniffer.py`
     
 
 ## MCU
