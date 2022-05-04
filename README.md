@@ -51,22 +51,22 @@ int main(void)
  
   while (1)
   {
-		//example:
-		//Use data structure specified inside script/UnionDataStruct.h
-		//If user is not providing array directly but casting from type other than uint8_t
-	  float_byte_u float_data;
-	  float_data.data = 1.0;
+	//example:
+	//Use data structure specified inside script/UnionDataStruct.h
+	//If user is not providing array directly but casting from type other than uint8_t
+	float_byte_u float_data;
+	float_data.data = 1.0;
 
-	  uint32_byte_u uint32_data;
-	  uint32_data.data = 0x12345678;
+	uint32_byte_u uint32_data;
+	uint32_data.data = 0x12345678;
 		
-		//3. Add the array into datalog message
-	  DataLogger_AddMessage(&datalog_msg, float_data.array, sizeof(float_data.array));
-	  DataLogger_AddMessage(&datalog_msg, uint32_data.array, sizeof(uint32_data.array));
-	  //4. After added all the message, call complete tx message to add check to ensure data integrity
-		DataLogger_CompleteTxMessage(&datalog_msg);
-		//5. Send the TX msg using serial protocol such as UART, USB, CAN, etc
-	  HAL_UART_Transmit(&huart3, datalog_msg.pMsg, datalog_msg.size, 1);
+	//3. Add the array into datalog message in the same sequence as config.yaml
+	DataLogger_AddMessage(&datalog_msg, float_data.array, sizeof(float_data.array));
+	DataLogger_AddMessage(&datalog_msg, uint32_data.array, sizeof(uint32_data.array));
+	//4. After added all the message, call complete tx message to add check to ensure data integrity
+	DataLogger_CompleteTxMessage(&datalog_msg);
+	//5. Send the TX msg using serial protocol such as UART, USB, CAN, etc
+	HAL_UART_Transmit(&huart3, datalog_msg.pMsg, datalog_msg.size, 1);
   }
 }
 
