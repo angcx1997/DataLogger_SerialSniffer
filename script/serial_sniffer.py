@@ -19,8 +19,10 @@ def setupPort(ser, config):
     except serial.SerialException as var:
         print("An exception occurred when try to open serial port")
         print("Exception details-> ", var)
+        return False
     else:
         print("Serial port opened")
+        return True
 
 def checkIntegrity(packet,config):
     # Check start of transmission
@@ -79,7 +81,7 @@ def main():
 
     # Load csv
     csv_name = config['csv-filename']
-    f = open(csv_name, "a")
+    f = open(csv_name, "w")
     writer = csv.writer(f, delimiter=",")
     
     # Input header into csv
@@ -92,7 +94,8 @@ def main():
 
     # Setup serial port
     ser = serial.Serial()
-    setupPort(ser,config)
+    while (setupPort(ser,config) != True):
+        pass
 
     # Data logger
     index = 1
