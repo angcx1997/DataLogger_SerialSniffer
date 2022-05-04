@@ -81,7 +81,7 @@ def main():
 
     # Load csv
     csv_name = config['csv-filename']
-    f = open(csv_name, "w")
+    f = open("../log/"+csv_name, "w")
     writer = csv.writer(f, delimiter=",")
     
     # Input header into csv
